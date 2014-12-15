@@ -1,0 +1,27 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: Logstash 1.4 init.d script
+# Required-Start: $network
+# Required-Stop: $network
+# Default-Start: 2 3 4 5
+# Description: Starts the Logstash 1.4
+### END INIT INFO
+name="CDN's Log"
+case "$1" in
+'start')
+/opt/logstash/bin/logstash -f /opt/logstash/conf.d/file.conf > /opt/logstash/logs/ls_cdn.log 2>&1 &
+echo "Starting $name"
+;;
+'stop')
+/usr/bin/kill -9 `ps auxww |grep logstash |grep java |awk '{print $2}'`
+echo "Stopping $name"
+;;
+'restart')
+/etc/init.d/lscdnt stop
+/etc/init.d/lscdnt start
+;;
+*)
+echo "Usage: $0 { start | stop |restart }"
+;;
+esac
+exit 0
